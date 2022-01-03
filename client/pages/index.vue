@@ -112,7 +112,7 @@ export default {
       'resetCharacter'
     ]),
     ...mapActions('favorite', [
-      'resetFavorite'
+      'resetFavorite',
     ]),
     async selectComic() {
       await this.$router.push(`/search/${this.comicID}`)

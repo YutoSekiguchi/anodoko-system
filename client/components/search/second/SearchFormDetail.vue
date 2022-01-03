@@ -113,13 +113,14 @@ export default {
       famousScene: true,
       kindOfScenes: [
         "戦闘シーン",
-        "衝撃シーン",
         "名シーン",
-        "感動シーン",
         "ギャグシーン",
         "死亡シーン",
         "回想シーン",
         "日常シーン",
+        "衝撃シーン",
+        "解説シーン",
+        "感動シーン",
         "胸キュンシーン",
       ],
       famousOrManiac: [
@@ -161,9 +162,9 @@ export default {
             alert("エラーが発生しました．再読み込みしてください");
           }
           if(this.$store.getters['user/isLoggedIn']){
-            this.$router.push(`/results/characters/${this.selectedCharacters[0]}/${this.selectedCharacters[1]}/${this.selectedCharacters[2]}/${this.selectedCharacters[3]}/${this.selectedCharacters[4]}/${this.$route.params.cid}/${this.$route.params.volume}/${this.selectedScene}/${this.selectedFamous}/${this.$store.state.user.userData.ID}`);
+            this.$router.push(`/results/scenes/${this.selectedCharacters[0]}/${this.selectedCharacters[1]}/${this.selectedCharacters[2]}/${this.selectedCharacters[3]}/${this.selectedCharacters[4]}/${this.$route.params.cid}/${this.$route.params.volume}/${this.selectedScene}/${this.selectedFamous}/${this.$store.state.user.userData.ID}`);
           }else{
-            this.$router.push(`/results/characters/${this.selectedCharacters[0]}/${this.selectedCharacters[1]}/${this.selectedCharacters[2]}/${this.selectedCharacters[3]}/${this.selectedCharacters[4]}/${this.$route.params.cid}/${this.$route.params.volume}/${this.selectedScene}/${this.selectedFamous}`);
+            this.$router.push(`/results/scenes/${this.selectedCharacters[0]}/${this.selectedCharacters[1]}/${this.selectedCharacters[2]}/${this.selectedCharacters[3]}/${this.selectedCharacters[4]}/${this.$route.params.cid}/${this.$route.params.volume}/${this.selectedScene}/${this.selectedFamous}`);
           }
         }
     }

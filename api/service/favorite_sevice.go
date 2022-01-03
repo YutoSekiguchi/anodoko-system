@@ -20,11 +20,18 @@ func (s FavoriteService) GetWhetherFavorite(db *gorm.DB, c echo.Context) ([]Favo
 }
 
 type FavoriteSceneInfo struct {
-	Id        int
+	Id          int
 	Name 				string
 	Volume			int
 	DetailScene string
 	Page 				int
+}
+type UserFavoriteList struct {
+	CID           int
+	Name 				  string
+	Volume        int
+	ComicVolImage string
+	CountCID      int
 }
 
 // uidを指定して指定したユーザーのお気に入りの一覧を取得

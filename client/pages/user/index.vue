@@ -2,7 +2,7 @@
   <v-container >
     <v-row>
     <v-col cols="6" sm="4" class="pr-0">
-      <v-navigation-drawer permanent width="450px">
+      <v-navigation-drawer permanent width="450px" class="pb-4">
       <v-system-bar color="orange"></v-system-bar>
       <v-list>
         <v-list-item>
@@ -57,9 +57,9 @@
     </v-navigation-drawer>
     </v-col>
     
-      <v-col cols="6" sm="8" style="overflow: scroll;" class="pl-0">
+      <v-col cols="6" sm="8"  class="px-0 pb-0">
         <v-card
-          class="mx-auto"
+          class="mx-auto scroll_box"
           max-width="1000"
           min-height="410"
           max-height="410"
@@ -83,7 +83,7 @@
 <script>
 import FavoriteScene from '~/components/user/FavoriteScene.vue'
 import RegisterScenes from '~/components/user/RegisterScenes.vue'
-// import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -102,6 +102,25 @@ export default {
       ],
     }
   },
-  
+  methods: {
+    ...mapActions('comic',[
+      'resetComic'
+    ]),
+    ...mapActions('scene', [
+      'resetScene'
+    ]),
+    ...mapActions('character', [
+      'resetCharacter'
+    ]),
+    ...mapActions('favorite', [
+      'resetFavorite'
+    ]),
+  },
+  async created() {
+    await this.resetComic()
+    await this.resetScene()
+    await this.resetCharacter()
+    await this.resetFavorite()
+  }
 }
 </script>

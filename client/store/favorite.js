@@ -42,11 +42,9 @@ export const actions = {
       commit('SET_FAVORITES_LIST', res.data)
     }).catch(() => {})
   },
-
   // post
   // お気に入りのついか
   async postFavorite({ commit, dispatch, rootState }, obj) {
-    console.log("Q")
     let statusCode = null
     await this.$axios({
       method: 'POST',

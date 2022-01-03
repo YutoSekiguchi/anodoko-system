@@ -9,6 +9,7 @@ export const state = () => ({
 
   // post
   addedComicData: {},
+  addedComicVolData: {},
 })
 
 export const mutations = {
@@ -32,6 +33,9 @@ export const mutations = {
   },
   SET_ADDED_COMIC_DATA(state, obj) {
     state.addedComicData = obj
+  },
+  SET_ADDED_COMIC_VOL_DATA(state, obj) {
+    state.addedComicVolData = obj
   },
   RESET_COMIC_DATA(state, n) {
     state.comics = n
@@ -115,6 +119,24 @@ export const actions = {
     
     if (statusCode == 401) {
       await dispatch('postComic', obj)
+    }
+  },
+  // 巻の追加
+  async postComicVol({ commit, dispatch, rootState }, obj) {
+    let statusCode = null
+    await this.$axios({
+      method: 'POST',
+      url: '/comics/volumes',
+      data: obj,
+    }).then((res) => {
+      commit('SET_ADDED_COMIC_VOL_DATA', res.data)
+    }).catch((e) => {
+      console.log(e)
+      statusCode = e.response.status
+    })
+
+    if (statusCode == 401) {
+      await dispatch('postComicVol', obj)
     }
   },
 

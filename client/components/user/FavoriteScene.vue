@@ -2,8 +2,10 @@
 <div>
   <div v-for="(data, i) in this.favoritesList" :key="i">
     <v-row style="border-bottom: 0.5px solid grey;" class="mr-12 mt-3">
-      <Scenes :data="data" />
-      <ScenesDetail :data="data" />
+      <v-row @click="moveScenePage(data)" style="cursor: pointer;">
+        <Scenes :data="data" />      
+        <ScenesDetail :data="data" />
+      </v-row>
       <v-col cols="1">
         <v-btn color="error" height="30" @click="deleteLike(data.Id)"><h6>削除</h6></v-btn>
       </v-col>
@@ -30,6 +32,9 @@ export default {
     async deleteLike(scid) {
       await this.deleteFavorite([this.$store.state.user.userData.ID, scid])
       await this.fetchFavoritesList(this.$store.state.user.userData.ID)
+    },
+    moveScenePage(data) {
+      this.$router.push(`/results/scene/${data.Id}`);
     }
   },
   computed: {

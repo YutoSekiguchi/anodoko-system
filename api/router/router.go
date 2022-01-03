@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/YutoSekiguchi/anodoko/controller"
-	"github.com/YutoSekiguchi/anodoko/util"
+	// "github.com/YutoSekiguchi/anodoko/util"
 )
 
 func InitRouter(db *gorm.DB) {
@@ -32,8 +32,8 @@ func InitRouter(db *gorm.DB) {
 	// User
 	user := e.Group("/users")
 	{
-		user.GET("", util.Private(ctrl.HandleGetUserList))
-		user.POST("", util.Private(ctrl.HandlePostUser))
+		user.GET("", ctrl.HandleGetUserList)
+		user.POST("", ctrl.HandlePostUser)
 		user.GET("/:uid", ctrl.HandleGetUserByID)
 		user.GET("/me", ctrl.HandleGetUserByEmail)
 	}
@@ -42,11 +42,11 @@ func InitRouter(db *gorm.DB) {
 	comic := e.Group("/comics")
 	{
 		comic.GET("", ctrl.HandleGetComicList)
-		comic.POST("", util.Private(ctrl.HandlePostComic))
+		comic.POST("", ctrl.HandlePostComic)
 		comic.GET("/:id", ctrl.HandleGetComic)
 		comic.GET("/volume/:cid/:volume", ctrl.HandleGetComicVolume)
 		comic.GET("/volumes/:cid", ctrl.HandleGetComicVolumes)
-		comic.POST("/volumes", util.Private(ctrl.HandlePostComicVolume))
+		comic.POST("/volumes", ctrl.HandlePostComicVolume)
 		comic.GET("/first", ctrl.HandleGetComicFirstVolumeList)
 		comic.GET("/under/:cid/:volume", ctrl.HandleGetComicUnderVolumeList)
 	}
@@ -55,6 +55,9 @@ func InitRouter(db *gorm.DB) {
 	character := e.Group("/characters")
 	{
 		character.GET("/under/:cid/:volume", ctrl.HandleGetCharacterUnderVolList)
+		character.GET("/name/:name", ctrl.HandleGetCharacterId)
+		character.POST("/appearance", ctrl.HandlePostAppearanceCharacters)
+		character.POST("", ctrl.HandlePostCharacter)
 	}
 
 	// Scene
@@ -66,6 +69,9 @@ func InitRouter(db *gorm.DB) {
 		scene.GET("/volume/pages/:cid/:volume", ctrl.HandleGetScenesVolList)
 		scene.GET("/volume/pages/under/:chid1/:chid2/:chid3/:chid4/:chid5/:cid/:volume/:scene", ctrl.HandleGetScenesUnderVolList)
 		scene.GET("/list/user/:uid", ctrl.HandleGetUserSetSceneList)
+		scene.GET("/scene/:scid", ctrl.HandleGetScene)
+		scene.GET("/user/info/:uid/:cvid/:page/:scene", ctrl.HandleGetUserScenesInfo)
+		scene.POST("", ctrl.HandlePostScenes)
 	}
 
 	// Comment
@@ -79,7 +85,7 @@ func InitRouter(db *gorm.DB) {
 	{
 		favorite.GET("/whether/:uid/:scid", ctrl.HandleGetWhetherFavorite)
 		favorite.GET("/list/:uid", ctrl.HandleGetFavoritesList)
-		favorite.POST("", util.Private(ctrl.HandlePostFavorites))
+		favorite.POST("", ctrl.HandlePostFavorites)
 		favorite.DELETE("/:uid/:scid", ctrl.HandleDeleteFavorites)
 	}
 

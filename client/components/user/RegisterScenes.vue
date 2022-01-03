@@ -1,7 +1,7 @@
 <template>
 <div>
   <div v-for="(data, i) in this.userSetScenesList" :key="i">
-    <v-row style="border-bottom: 0.5px solid grey;" class="mr-12 mt-3">
+    <v-row style="border-bottom: 0.5px solid grey; cursor: pointer;" class="mr-6 mt-3" @click="moveScenePage(data)">
       <Scenes :data="data" />
       <ScenesDetail :data="data" />
     </v-row>
@@ -23,6 +23,9 @@ export default {
     ...mapActions('scene', [
       'fetchUserSetSceneList',
     ]),
+    moveScenePage(data) {
+      this.$router.push(`/results/scene/${data.ScID}`);
+    }
   },
   computed: {
     ...mapState('scene', [

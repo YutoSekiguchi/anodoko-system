@@ -105,6 +105,7 @@ type ScenePlusVolume struct {
 	Volume      	int
 	ComicVolImage string
 	EbookUrl      string
+	ScID          int
 }
 // GetScenesUnderVolList chid1~5とcid, volume, sceneを指定してそれに合うシーンを全て取得
 func (s SceneService) GetScenesUnderVolList(db *gorm.DB, c echo.Context) ([]ScenePlusVolume, error) {
@@ -118,7 +119,7 @@ func (s SceneService) GetScenesUnderVolList(db *gorm.DB, c echo.Context) ([]Scen
 	volume := c.Param("volume")
 	scene := c.Param("scene")
 
-	if err := db.Debug().Raw("SELECT *, comic_volumes.volume, comic_volumes.ebook_url FROM `scenes` JOIN appearance_characters ON appearance_characters.scid = scenes.id JOIN characters ON characters.id = appearance_characters.chid JOIN comic_volumes ON comic_volumes.id = appearance_characters.cvid WHERE chid IN (?, ?, ?, ?, ?) AND comic_volumes.cid = ? AND comic_volumes.volume <= ? AND scenes.scene = ?", chid1, chid2, chid3, chid4, chid5, cid, volume, scene).Scan(&spv).Error; err != nil {
+	if err := db.Debug().Raw("SELECT *, comic_volumes.volume, comic_volumes.ebook_url, scenes.id AS sc_id FROM `scenes` JOIN appearance_characters ON appearance_characters.scid = scenes.id JOIN characters ON characters.id = appearance_characters.chid JOIN comic_volumes ON comic_volumes.id = appearance_characters.cvid WHERE chid IN (?, ?, ?, ?, ?) AND comic_volumes.cid = ? AND comic_volumes.volume <= ? AND scenes.scene = ?", chid1, chid2, chid3, chid4, chid5, cid, volume, scene).Scan(&spv).Error; err != nil {
 		return nil, err
 	}
 	return spv, nil
@@ -138,6 +139,7 @@ type SceneUserList struct {
 	Volume      	int
 	ComicVolImage string
 	EbookUrl      string
+	ScID          int
 }
 
 // uidを指定してユーザが追加したシーンの取得
@@ -145,8 +147,45 @@ func (s SceneService) GetUserSetSceneList(db *gorm.DB, c echo.Context) ([]SceneU
 	var sul []SceneUserList
 	uid := c.Param("uid")
 
-	if err := db.Debug().Raw("SELECT *, comics.name, comic_volumes.volume, comic_volumes.ebook_url FROM `scenes` JOIN comic_volumes ON comic_volumes.id = scenes.cvid JOIN comics ON comics.id = comic_volumes.cid WHERE scenes.uid = ? ", uid).Scan(&sul).Error; err != nil {
+	if err := db.Debug().Raw("SELECT *, comics.name, comic_volumes.volume, comic_volumes.ebook_url, scenes.id AS sc_id FROM `scenes` JOIN comic_volumes ON comic_volumes.id = scenes.cvid JOIN comics ON comics.id = comic_volumes.cid WHERE scenes.uid = ? ", uid).Scan(&sul).Error; err != nil {
 		return nil, err
 	}
 	return sul, nil
+}
+
+// scidを指定してシーンの詳細情報を取得
+func (s SceneService) GetScene(db *gorm.DB, c echo.Context) ([]SceneUserList, error) {
+	var sul []SceneUserList
+	scid := c.Param("scid")
+
+	if err := db.Debug().Raw("SELECT *, comics.name, comic_volumes.volume, comic_volumes.ebook_url, scenes.id AS sc_id FROM `scenes` JOIN comic_volumes ON comic_volumes.id = scenes.cvid JOIN comics ON comics.id = comic_volumes.cid WHERE scenes.id = ?", scid).Scan(&sul).Error; err != nil {
+		return nil, err
+	}
+	return sul, nil
+}
+
+// uid, cvid, page, sceneを指定してその巻のシーンを取得
+func (s SceneService) GetUserScenesInfo(db *gorm.DB, c echo.Context) ([]Scene, error) {
+	var sc []Scene
+	uid := c.Param("uid")
+	cvid := c.Param("cvid")
+	page := c.Param("page")
+	scene := c.Param("scene")
+
+	if err := db.Debug().Raw("SELECT * FROM scenes WHERE uid = ? AND cvid = ? AND page = ? AND scene = ?", uid, cvid, page, scene).Scan(&sc).Error; err != nil {
+		return nil, err
+	}
+	return sc, nil
+}
+
+// POST
+// シーンの追加
+func (s SceneService) PostScenes(db *gorm.DB, c echo.Context) (Scene, error) {
+	var sc Scene
+	c.Bind(&sc)
+
+	if err := db.Table("scenes").Create(&sc).Error; err != nil {
+		return sc, err
+	}
+	return sc, nil
 }

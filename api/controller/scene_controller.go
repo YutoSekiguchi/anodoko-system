@@ -85,3 +85,42 @@ func (ctrl Controller) HandleGetUserSetSceneList(c echo.Context) error {
 		return c.JSON(200, p)
 	}
 }
+
+// HandleGetScene GET /scenes/scene/:scid 指定したシーンの情報の取得
+func (ctrl Controller) HandleGetScene(c echo.Context) error {
+	var s service.SceneService
+	p, err := s.GetScene(ctrl.Db, c)
+
+	if err != nil {
+		fmt.Println(err)
+		return c.JSON(http.StatusNotFound, err.Error())
+	} else {
+		return c.JSON(200, p)
+	}
+}
+
+// HandleGetUserScenesInfo GET /scenes/user/info/:uid/:cvid/:page/:scene
+func (ctrl Controller) HandleGetUserScenesInfo(c echo.Context) error {
+	var s service.SceneService
+	p, err := s.GetUserScenesInfo(ctrl.Db, c)
+
+	if err != nil {
+		fmt.Println(err)
+		return c.JSON(http.StatusNotFound, err.Error())
+	} else {
+		return c.JSON(200, p)
+	}
+}
+
+// HandlePostScenes POST /scenes シーンの追加
+func (ctrl Controller) HandlePostScenes(c echo.Context) error {
+	var s service.SceneService
+	p, err := s.PostScenes(ctrl.Db, c)
+
+	if err != nil {
+		fmt.Println(err)
+		return c.JSON(http.StatusNotFound, err.Error())
+	} else {
+		return c.JSON(200, p)
+	}
+}
