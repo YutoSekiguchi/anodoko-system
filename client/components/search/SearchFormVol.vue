@@ -13,7 +13,7 @@
           <h2 align="center" class="font-weight-bold" style="border-bottom: 2px solid orange;">{{ this.comicData[0]["Name"] }}</h2>
         </v-col>
         <v-col cols="12" class="px-0 py-0 mt-12 mb-4">
-          <h5 align="center" class="font-weight-bold">何巻まで読みましたか？</h5>
+          <h5 align="center" class="font-weight-bold">何巻より前のシーンですか？</h5>
         </v-col>
       <v-row>
         <v-col cols="3"></v-col>
